@@ -1,0 +1,35 @@
+
+Ejemplo: Al crear dos contenedores y asociarlos una red personalizada,
+automáticamente se van a ver sin tener que hacer ningún link.
+
+1.- Creamos el contenedor-1: mysql-server
+docker run -d --name mysql-server --network red1 -e MYSQL_ROOT_PASSWORD=peque mysql
+2.- Comprobamos que podemos conectarnos a ese contenedor.
+# docker exec -it mysql-server /bin/bash
+# mysql -u root -p → nos conectamos a mysql
+mysql> show databases;28
+
+3.-. Creamos el contenedor-2: mysql-client
+Este contenedor lo vamos a utilizar como cliente para conectarnos a mysql-server.
+# docker run -it --name mysql-client --network red1 mysql /bin/bash
+-it → Queremos utilizar una consola
+No indicamos Password, porque no queremos crear una nueva BD, queremos solo
+utilizarlo para conectarnos la servidor.
+4.- Nos conectamos al servidor mysql de forma remota:
+# mysql -h mysql-server -u root -p
+mysql>show databases;
+
+
+#docker inspect --format='{{.Config.ExposedPorts}}' mysql
+
+creamos un segundo contenedor con el mismo puerto que el host
+#docker run -it -d -p 3306:3306 --name mysql3  mysql bash
+
+si arrancamos otro cambiamos el puerto deben estar en la misma red con diferentes ip
+# docker run -it -d -p 3307:3306 --name mysql4  mysql bash
+
+desde el #docker exec -it mysql3 bash comprobamos que llegamos al otro mediante ping instalamos ping
+apt update
+apt install iputils-ping
+
+desde mysql4 accedemos a #mysql -h mysql3 -p 3306clear

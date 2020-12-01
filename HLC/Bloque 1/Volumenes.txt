@@ -1,0 +1,8 @@
+CREACIÓN DE UN VOLUMEN
+
+#docker run -it -v /datos --name mi-ubuntu ubuntu bash
+
+-v → Volumen
+/datos → Es la carpeta que se va a crear dentro del contenedor
+
+En el host # /var/lib/docker/volumes/ID/_data
