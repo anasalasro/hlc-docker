@@ -1,0 +1,32 @@
+version: '3'
+services:
+  joomla:
+     image: joomla
+     environment:
+      JOOMLA_DB_HOST: dbserver:3306
+      JOOMLA_DB_PASSWORD: peque
+     ports:
+      - 80:80
+     volumes:
+      - web:/var/www/html
+     depends_on:
+      - dbserver
+  dbserver:
+     image: mariadb
+     environment:
+      MYSQL_ROOT_PASSWORD: peque
+     ports:
+      - 3306:3306
+     volumes:
+      - db:/var/lib/mysql
+  phpmyadmin:
+     image: phpmyadmin
+     environment:
+       MYSQL_ROOT_PASSWORD: peque
+       PMA_ARBITRARY: 1
+     ports:
+      - 8080:80
+volumes:
+  web:
+  db:
+     
