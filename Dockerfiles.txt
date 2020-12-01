@@ -95,3 +95,55 @@ ADD mis-app .
 ENTRYPOINT ["python 3"]
 CMD ["hola.py"]
 
+
+
+##DOCKER-COMPOSE
+
+version: '3'
+services:
+  wordpress:
+     image: wordpress
+     environment:
+      WORDPRESS_DB_HOST: dbserver:3306
+      WORDPRESS_DB_PASSWORD: mysqlpw
+     ports:
+      - 80:80
+     depends_on:
+      - dbserver
+  dbserver:
+     image: mysql:5.7
+     environment:
+      MYSQL_ROOT_PASSWORD: mysqlpw
+     ports:
+      - 3306:3306
+
+
+
+
+
+
+
+version: "3.2"
+services:
+  web:
+    image: nginx:alpine
+    volumes:
+      - type: volume
+        source: mydata
+        target: /data
+        volume:
+          nocopy: true
+      - type: bind
+        source: ./static
+        target: /opt/app/static
+    ports:
+      - 80:80
+  db:
+    image: postgres:latest
+    volumes:
+      - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
+      - "dbdata:/var/lib/postgresql/data"
+
+volumes:
+  mydata:
+  dbdata:
