@@ -1,0 +1,97 @@
+FROM ubuntu
+MAINTAINER Ana Salas
+RUN apt-get update
+RUN apt-get install -y python
+RUN echo 1.0 >> /etc/version
+RUN apt-get install -y git
+RUN apt-get install -y iputils-ping
+
+CMD ["echo", "Bienvenidos"]
+
+
+
+FROM debian
+RUN apt-get update && apt-get -y install cowsay
+ENV PATH="$PATH:/usr/games"
+ENTRYPOINT ["cowsay"]
+CMD ["Gatitos"]
+
+
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y python
+RUN apt-get install -y python
+RUN echo 1.0 >> /etc/version
+RUN apt-get install -y git
+RUN apt-get install -y iputils-ping
+RUN mkdir /datos
+WORKDIR /datos
+RUN touch f1.txt
+RUN mkdir /datos1
+WORKDIR /datos1
+RUN touch f2.txt
+ENTRYPOINT ["/bin/bash"] 
+
+
+
+
+RUN mkdir /datos
+WORKDIR /datos
+RUN touch f1.txt
+RUN mkdir /datos1
+WORKDIR /datos1
+RUN touch f2.txt
+
+##copia index.html en /datos1
+COPY index.html .
+##copia app.log en /datos
+COPY app.log /datos
+
+##
+ADD docs docs
+## copia todo f(algo) en /datos/
+ADD f* /datos/
+ADD f.tar . ##descomprimelo donde me encuentro
+ENTRYPOINT ["/bin/bash"] 
+
+
+##ENV permite declarar variables de entorno en el contenedor
+ENV dir=/data dir1=/data1
+RUN mkdir $dir && $dir1 ##crea el directorio /data y /data1
+
+##ARG permite pasar variables en el momento de crear la imagen
+ENV dir=/data dir1=/data1
+RUN mkdir $dir && $dir1
+##añade la dir2 y crea /data2
+ARG dir2
+RUN mkdir $dir2
+
+EXPOSE 80 ##puerto 
+
+
+FROM debian
+RUN apt-get update
+RUN apt-get install -y apache2
+EXPOSE 80
+
+##ADD → Copiamos el contenido de la carpeta paginas, que está en el host a
+/var/www/html del contenedor.
+VOLUME → Nos crea un nuevo volumen en el host con la información de
+/var/www/html##
+
+ADD paginas /var/www/html
+VOLUME ["/var/www/html"]
+
+ENTRYPOINT ["/usr/bin/apache2ctl","-D", "FOREGROUND"]
+
+
+
+
+FROM debian:latest
+RUN apt-get update && apt-get install -y python3
+WORKDIR /usr/mis-app
+ADD mis-app .
+ENTRYPOINT ["python 3"]
+CMD ["hola.py"]
+
